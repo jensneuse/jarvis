@@ -33,3 +33,7 @@ Jarvis helps Jens manage work on the side — acting as a personal assistant tha
 
 - **Linear**: Project and issue tracking (available via MCP)
 - **Notion**: Knowledge base and documents (available via MCP)
+
+## YouTube Episodes
+
+To create YouTube episodes from content, use the `./YOUTUBE.md` playbook.
