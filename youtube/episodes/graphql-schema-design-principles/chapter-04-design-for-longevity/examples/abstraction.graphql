@@ -1,0 +1,31 @@
+# Bad: Exposing the third-party contract directly
+type Payment {
+  stripeChargeId: String!           # Leaks Stripe implementation
+  stripeCustomerId: String!         # Client now depends on Stripe
+  stripePaymentMethodType: String!  # Switching providers = breaking change
+}
+
+# Good: Abstract behind your own types
+type PaymentInfo {
+  id: ID!
+  status: PaymentStatus!
+  amount: Money!
+  method: PaymentMethod!
+  createdAt: DateTime!
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
+enum PaymentMethod {
+  CREDIT_CARD
+  BANK_TRANSFER
+  DIGITAL_WALLET
+}
+
+# Now you can switch from Stripe to Adyen, Square, or anything else
+# without touching your GraphQL schema or breaking clients.

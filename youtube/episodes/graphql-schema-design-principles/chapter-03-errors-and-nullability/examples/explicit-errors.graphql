@@ -1,0 +1,34 @@
+# Bad: Generic errors — client must parse strings
+type Mutation {
+  createOrder(input: CreateOrderInput!): Order
+  # On failure: { "errors": [{ "message": "Item out of stock" }] }
+  # Client: if (error.message.includes("out of stock")) { ... } 😬
+}
+
+# Good: Typed results — client gets exhaustive handling
+type Mutation {
+  createOrder(input: CreateOrderInput!): CreateOrderResult!
+}
+
+union CreateOrderResult =
+  | Order
+  | OutOfStockError
+  | InvalidAddressError
+  | PaymentDeclinedError
+
+type OutOfStockError {
+  message: String!
+  itemId: ID!
+  availableQuantity: Int!
+}
+
+type InvalidAddressError {
+  message: String!
+  field: String!
+  suggestion: String
+}
+
+type PaymentDeclinedError {
+  message: String!
+  retryable: Boolean!
+}

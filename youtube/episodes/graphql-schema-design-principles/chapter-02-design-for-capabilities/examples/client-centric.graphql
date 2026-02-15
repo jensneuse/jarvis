@@ -1,0 +1,33 @@
+# Bad: Forces multiple round trips
+# Client must: 1) fetch user, 2) fetch orders, 3) fetch items
+
+type Query {
+  user(id: ID!): User
+  ordersByUser(userId: ID!): [Order!]!
+  orderItems(orderId: ID!): [OrderItem!]!
+}
+
+# Good: Lets clients traverse the graph naturally
+
+type Query {
+  user(id: ID!): User
+}
+
+type User {
+  id: ID!
+  name: String!
+  orders(first: Int = 10, after: String): OrderConnection!
+}
+
+type Order {
+  id: ID!
+  status: OrderStatus!
+  items: [OrderItem!]!
+  total: Money!
+}
+
+type OrderItem {
+  product: Product!
+  quantity: Int!
+  price: Money!
+}

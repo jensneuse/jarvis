@@ -1,0 +1,27 @@
+# --- Products subgraph (owned by Products team) ---
+type Product @key(fields: "id") {
+  id: ID!
+  name: String!
+  description: String!
+  price: Money!
+  category: Category!
+}
+
+# --- Reviews subgraph (owned by Reviews team) ---
+type Product @key(fields: "id") {
+  id: ID!
+  reviews(first: Int = 5, after: String): ReviewConnection!
+  averageRating: Float
+  reviewCount: Int!
+}
+
+# --- Inventory subgraph (owned by Inventory team) ---
+type Product @key(fields: "id") {
+  id: ID!
+  availability: Availability!
+  estimatedDelivery: DateRange
+  warehouse: Warehouse
+}
+
+# The router composes these into one unified Product type.
+# Each team deploys independently. No coordination needed.
